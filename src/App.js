@@ -38,8 +38,12 @@ function App() {
   }, []);
 
   const formatMessage = (msg) => {
+    if (msg.includes("DEBUG")) {
+      return <span style={{ color: '#888', fontStyle: 'italic' }}>{msg}</span>;
+    }
+
     if (msg.includes("CRITICAL")) {
-      return formatMessage(msg.replace("CRITICAL", "CRITICAL ALERT"));
+      return formatMessage(msg.replace("CRITICAL", "CRITICAL SYSTEM  ALERT"));
     }
     return msg;
   };
@@ -48,11 +52,14 @@ function App() {
     <div style={{ padding: '20px', fontFamily: 'monospace' }}>
       <h2 style={{ color: 'red' }}>Live System Logs ({logs.length} events)</h2>
 
-      <div style={{ height: '600px', overflowY: 'auto', border: '1px solid #333' }}>
-        <ul>
+      <div style={{ height: '600px', overflowY: 'auto', border: '1px solid #333', backgroundColor: '#000' }}>
+        <ul style={{ listStyleType: 'none', padding: 0, margin: 0 }}>
           {logs.map((log) => (
-            <li key={log.id} style={{ padding: '4px 0', borderBottom: '1px solid #eee' }}>
-              <strong>[{log.timestamp}]</strong> {formatMessage(log.message)}
+            <li key={log.id} style={{ padding: '6px 10px', borderBottom: '1px solid #222', color: '#0f0' }}>
+              <span style={{ opacity: 0.6, marginRight: '10px' }}>
+                [{new Date(log.timestamp).toLocaleTimeString()}]
+              </span> 
+              {formatMessage(log.message)}              
             </li>
           ))}
         </ul>
